@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced College Timetable</title>
+    <title>Editable College Timetable</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -55,154 +55,193 @@
             background-color: #ffffff;
         }
 
-        .time {
-            font-weight: bold;
-            color: #495057;
+        .editable {
+            cursor: pointer;
         }
 
-        .instructor {
-            font-style: italic;
-            color: #6c757d;
+        .editable:hover {
+            background-color: #ffffcc;
         }
 
-        @media (max-width: 600px) {
-            table {
-                font-size: 14px;
-            }
-
-            th, td {
-                padding: 10px;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-        }
-
-        /* Button styles */
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
+        /* Login form styles */
+        #login-form {
+            display: none;
             margin: 20px auto;
+            text-align: center;
+        }
+
+        #login-form input {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        #login-button {
+            padding: 10px 20px;
             background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
-            text-decoration: none;
-            font-size: 1em;
-            transition: background-color 0.3s;
+            cursor: pointer;
         }
 
-        .btn:hover {
+        #login-button:hover {
             background-color: #218838;
         }
     </style>
 </head>
 <body>
-    <h1>Enhanced College Timetable</h1>
+    <h1>Editable College Timetable</h1>
+
+    <!-- Login Form -->
+    <div id="login-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button id="login-button">Login</button>
+    </div>
+
+    <!-- Timetable structure -->
     <table id="timetable">
         <thead>
             <tr>
                 <th>Day</th>
-                <th>Time</th>
-                <th>Classes</th>
-                <th>Instructor</th>
+                <th>9:00 AM - 10:00 AM</th>
+                <th>10:15 AM - 11:15 AM</th>
+                <th>11:30 AM - 12:30 PM</th>
+                <th>1:00 PM - 2:00 PM</th>
+                <th>2:15 PM - 3:15 PM</th>
+                <th>3:30 PM - 4:30 PM</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>Monday</td>
-                <td id="monday-time"></td>
-                <td id="monday-classes"></td>
-                <td id="monday-instructor"></td>
+                <td class="editable" id="monday-09" data-day="monday" data-time="09:00 AM - 10:00 AM"></td>
+                <td class="editable" id="monday-10" data-day="monday" data-time="10:15 AM - 11:15 AM"></td>
+                <td class="editable" id="monday-11" data-day="monday" data-time="11:30 AM - 12:30 PM"></td>
+                <td class="editable" id="monday-13" data-day="monday" data-time="1:00 PM - 2:00 PM"></td>
+                <td class="editable" id="monday-14" data-day="monday" data-time="2:15 PM - 3:15 PM"></td>
+                <td class="editable" id="monday-15" data-day="monday" data-time="3:30 PM - 4:30 PM"></td>
             </tr>
             <tr>
                 <td>Tuesday</td>
-                <td id="tuesday-time"></td>
-                <td id="tuesday-classes"></td>
-                <td id="tuesday-instructor"></td>
+                <td class="editable" id="tuesday-09" data-day="tuesday" data-time="09:00 AM - 10:00 AM"></td>
+                <td class="editable" id="tuesday-10" data-day="tuesday" data-time="10:15 AM - 11:15 AM"></td>
+                <td class="editable" id="tuesday-11" data-day="tuesday" data-time="11:30 AM - 12:30 PM"></td>
+                <td class="editable" id="tuesday-13" data-day="tuesday" data-time="1:00 PM - 2:00 PM"></td>
+                <td class="editable" id="tuesday-14" data-day="tuesday" data-time="2:15 PM - 3:15 PM"></td>
+                <td class="editable" id="tuesday-15" data-day="tuesday" data-time="3:30 PM - 4:30 PM"></td>
             </tr>
-            <tr>
-                <td>Wednesday</td>
-                <td id="wednesday-time"></td>
-                <td id="wednesday-classes"></td>
-                <td id="wednesday-instructor"></td>
-            </tr>
-            <tr>
-                <td>Thursday</td>
-                <td id="thursday-time"></td>
-                <td id="thursday-classes"></td>
-                <td id="thursday-instructor"></td>
-            </tr>
-            <tr>
-                <td>Friday</td>
-                <td id="friday-time"></td>
-                <td id="friday-classes"></td>
-                <td id="friday-instructor"></td>
-            </tr>
+            <!-- Add other days in a similar pattern -->
         </tbody>
     </table>
-    <a href="#" class="btn">Download Timetable</a>
+
+    <div id="free-teachers">
+        <p>Free Teachers:</p>
+        <ul id="free-teachers-list"></ul>
+    </div>
+
     <script>
-        // Define the subjects, labs, and their details with specific times
-        const timetableConfig = {
-            monday: {
-                classes: [
-                    { subject: "Math", time: "9:00 AM - 10:00 AM", instructor: "Mr. Smith" },
-                    { subject: "Science", time: "10:15 AM - 11:15 AM", instructor: "Mrs. Johnson" },
-                    { subject: "English", time: "11:30 AM - 12:30 PM", instructor: "Ms. Davis" },
-                    { lab: "Chemistry Lab", time: "1:00 PM - 2:00 PM", instructor: "Dr. Brown" }
-                ]
-            },
-            tuesday: {
-                classes: [
-                    { subject: "History", time: "9:00 AM - 10:00 AM", instructor: "Mr. Wilson" },
-                    { subject: "Geography", time: "10:15 AM - 11:15 AM", instructor: "Ms. Taylor" },
-                    { lab: "Physics Lab", time: "11:30 AM - 12:30 PM", instructor: "Dr. White" }
-                ]
-            },
-            wednesday: {
-                classes: [
-                    { subject: "Physical Education", time: "9:00 AM - 10:00 AM", instructor: "Coach Green" },
-                    { subject: "Math", time: "10:15 AM - 11:15 AM", instructor: "Mr. Smith" },
-                    { lab: "Biology Lab", time: "11:30 AM - 12:30 PM", instructor: "Dr. Black" }
-                ]
-            },
-            thursday: {
-                classes: [
-                    { subject: "Science", time: "9:00 AM - 10:00 AM", instructor: "Mrs. Johnson" },
-                    { subject: "English", time: "10:15 AM - 11:15 AM", instructor: "Ms. Davis" },
-                    { subject: "History", time: "11:30 AM - 12:30 PM", instructor: "Mr. Wilson" },
-                    { lab: "Computer Lab", time: "1:00 PM - 2:00 PM", instructor: "Mr. Blue" }
-                ]
-            },
-            friday: {
-                classes: [
-                    { subject: "Geography", time: "9:00 AM - 10:00 AM", instructor: "Ms. Taylor" },
-                    { subject: "Physical Education", time: "10:15 AM - 11:15 AM", instructor: "Coach Green" },
-                    { lab: "Art Lab", time: "11:30 AM - 12:30 PM", instructor: "Ms. Red" }
-                ]
-            }
-        };
+        // Sample user credentials
+        const users = [
+            { username: "admin", password: "password123" }, // Add your authorized users here
+            { username: "teacher1", password: "password456" }
+        ];
+
+        // Function to check user credentials
+        function checkCredentials(username, password) {
+            return users.some(user => user.username === username && user.password === password);
+        }
 
         // Function to generate the timetable
         function generateTimetable() {
-            const days = Object.keys(timetableConfig);
+            // Populate the timetable with classes (example data)
+            const timetableConfig = {
+                monday: {
+                    classes: [
+                        { subject: "Math", time: "9:00 AM - 10:00 AM", instructor: "Mr. Smith" },
+                        { subject: "Science", time: "10:15 AM - 11:15 AM", instructor: "Mrs. Johnson" },
+                        { subject: "English", time: "11:30 AM - 12:30 PM", instructor: "Ms. Davis" }
+                    ]
+                },
+                // ... other days
+            };
+
+            for (const day in timetableConfig) {
+                timetableConfig[day].classes.forEach(classData => {
+                    const { subject, time, instructor } = classData;
+                    const cellId = `${day}-${time.split(' ')[0].replace(':', '')}`; // Create cell ID based on time
+                    const cell = document.getElementById(cellId);
+                    if (cell) {
+                        cell.innerHTML = `${subject}<br><span class="instructor">${instructor}</span>`;
+                    }
+                });
+            }
+
+            // Update the free teachers list
+            updateFreeTeachers();
+        }
+
+        // Function to update the list of free teachers
+        function updateFreeTeachers() {
+            const occupiedTeachers = new Set();
+            for (const day in timetableConfig) {
+                timetableConfig[day].classes.forEach(classData => {
+                    occupiedTeachers.add(classData.instructor);
+                });
+            }
+
+            const allTeachers = ["Mr. Smith", "Mrs. Johnson", "Ms. Davis", "Mr. Wilson", "Ms. Taylor", "Dr. White"]; // List of all teachers
+            const freeTeachersList = allTeachers.filter(teacher => !occupiedTeachers.has(teacher));
             
-            days.forEach(day => {
-                const { classes } = timetableConfig[day];
-                const classDetails = classes.map(c => `${c.time}: ${c.subject || c.lab}`).join("<br>");
-                const instructors = classes.map(c => c.instructor).join(", ");
-                
-                // Populate the timetable
-                document.getElementById(`${day}-time`).innerHTML = classDetails;
-                document.getElementById(`${day}-classes`).innerText = classes.map(c => c.subject || c.lab).join(", ");
-                document.getElementById(`${day}-instructor`).innerText = instructors;
+            const freeTeachersListElement = document.getElementById('free-teachers-list');
+            freeTeachersListElement.innerHTML = ''; // Clear previous content
+
+            freeTeachersList.forEach(teacher => {
+                const listItem = document.createElement('li');
+                listItem.textContent = teacher;
+                freeTeachersListElement.appendChild(listItem);
             });
         }
 
-        // Generate the timetable on page load
-        window.onload = generateTimetable;
+        // Function to handle login
+        document.getElementById('login-button').addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (checkCredentials(username, password)) {
+                alert("Login successful!");
+                document.getElementById('login-form').style.display = 'none'; // Hide login form
+                document.querySelectorAll('.editable').forEach(cell => {
+                    cell.addEventListener('click', () => {
+                        const currentContent = cell.innerHTML;
+                        const day = cell.dataset.day;
+                        const time = cell.dataset.time;
+
+                        // Replace cell content with an input field
+                        cell.innerHTML = `<input type="text" value="${currentContent}" id="${day}-${time}-input">`;
+                        const inputField = document.getElementById(`${day}-${time}-input`);
+                        inputField.focus();
+
+                        // Update timetableConfig on input blur
+                        inputField.addEventListener('blur', () => {
+                            const newValue = inputField.value;
+                            cell.innerHTML = newValue;
+
+                            // Update timetableConfig (you'll need to implement logic to update the relevant class object)
+                        });
+                    });
+                });
+                generateTimetable(); // Generate the timetable after login
+            } else {
+                alert("Invalid username or password.");
+            }
+        });
+
+        // Show the login form on page load
+        window.onload = () => {
+            document.getElementById('login-form').style.display = 'block';
+        };
     </script>
 </body>
 </html>
+

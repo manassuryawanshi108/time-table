@@ -1,0 +1,14 @@
+// Frontend (JavaScript)
+// ... (Authentication logic) ...
+
+// Check if the user has the 'editor' role
+if (user.role === 'editor') {
+  makeEditable(); 
+}
+
+// ... (rest of your JavaScript code) ...
+
+function makeEditable() {
+    // Function to make cells editable (previous code logic)
+}
+

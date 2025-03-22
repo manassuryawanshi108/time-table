@@ -5,7 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enhanced College Timetable</title>
     <style>
-        /* ... (previous styles) ... */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e2e6ea;
+            transform: scale(1.02);
+        }
+
+        td {
+            background-color: #ffffff;
+        }
+
+        .time {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .instructor {
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        @media (max-width: 600px) {
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px auto;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -14,84 +104,105 @@
         <thead>
             <tr>
                 <th>Day</th>
-                <th>9:00 AM - 10:00 AM</th>
-                <th>10:15 AM - 11:15 AM</th>
-                <th>11:30 AM - 12:30 PM</th>
-                <th>1:00 PM - 2:00 PM</th>
-                <th>2:15 PM - 3:15 PM</th>
-                <th>3:30 PM - 4:30 PM</th>
+                <th>Time</th>
+                <th>Classes</th>
+                <th>Instructor</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>Monday</td>
-                <td id="monday-09" data-day="monday" data-time="09:00 AM - 10:00 AM"></td>
-                <td id="monday-10" data-day="monday" data-time="10:15 AM - 11:15 AM"></td>
-                <td id="monday-11" data-day="monday" data-time="11:30 AM - 12:30 PM"></td>
-                <td id="monday-13" data-day="monday" data-time="1:00 PM - 2:00 PM"></td>
-                <td id="monday-14" data-day="monday" data-time="2:15 PM - 3:15 PM"></td>
-                <td id="monday-15" data-day="monday" data-time="3:30 PM - 4:30 PM"></td>
+                <td id="monday-time"></td>
+                <td id="monday-classes"></td>
+                <td id="monday-instructor"></td>
             </tr>
             <tr>
                 <td>Tuesday</td>
-                <td id="tuesday-09" data-day="tuesday" data-time="09:00 AM - 10:00 AM"></td>
-                <td id="tuesday-10" data-day="tuesday" data-time="10:15 AM - 11:15 AM"></td>
-                <td id="tuesday-11" data-day="tuesday" data-time="11:30 AM - 12:30 PM"></td>
-                <td id="tuesday-13" data-day="tuesday" data-time="1:00 PM - 2:00 PM"></td>
-                <td id="tuesday-14" data-day="tuesday" data-time="2:15 PM - 3:15 PM"></td>
-                <td id="tuesday-15" data-day="tuesday" data-time="3:30 PM - 4:30 PM"></td>
+                <td id="tuesday-time"></td>
+                <td id="tuesday-classes"></td>
+                <td id="tuesday-instructor"></td>
             </tr>
-            <!-- Add other days in a similar pattern -->
+            <tr>
+                <td>Wednesday</td>
+                <td id="wednesday-time"></td>
+                <td id="wednesday-classes"></td>
+                <td id="wednesday-instructor"></td>
+            </tr>
+            <tr>
+                <td>Thursday</td>
+                <td id="thursday-time"></td>
+                <td id="thursday-classes"></td>
+                <td id="thursday-instructor"></td>
+            </tr>
+            <tr>
+                <td>Friday</td>
+                <td id="friday-time"></td>
+                <td id="friday-classes"></td>
+                <td id="friday-instructor"></td>
+            </tr>
         </tbody>
     </table>
-    <div id="free-teachers">
-        <p>Free Teachers:</p>
-        <ul id="free-teachers-list"></ul>
-    </div>
-
+    <a href="#" class="btn">Download Timetable</a>
     <script>
+        // Define the subjects, labs, and their details with specific times
         const timetableConfig = {
             monday: {
                 classes: [
                     { subject: "Math", time: "9:00 AM - 10:00 AM", instructor: "Mr. Smith" },
                     { subject: "Science", time: "10:15 AM - 11:15 AM", instructor: "Mrs. Johnson" },
-                    { subject: "English", time: "11:30 AM - 12:30 PM", instructor: "Ms. Davis" }
+                    { subject: "English", time: "11:30 AM - 12:30 PM", instructor: "Ms. Davis" },
+                    { lab: "Chemistry Lab", time: "1:00 PM - 2:00 PM", instructor: "Dr. Brown" }
                 ]
             },
-            // ... other days
+            tuesday: {
+                classes: [
+                    { subject: "History", time: "9:00 AM - 10:00 AM", instructor: "Mr. Wilson" },
+                    { subject: "Geography", time: "10:15 AM - 11:15 AM", instructor: "Ms. Taylor" },
+                    { lab: "Physics Lab", time: "11:30 AM - 12:30 PM", instructor: "Dr. White" }
+                ]
+            },
+            wednesday: {
+                classes: [
+                    { subject: "Physical Education", time: "9:00 AM - 10:00 AM", instructor: "Coach Green" },
+                    { subject: "Math", time: "10:15 AM - 11:15 AM", instructor: "Mr. Smith" },
+                    { lab: "Biology Lab", time: "11:30 AM - 12:30 PM", instructor: "Dr. Black" }
+                ]
+            },
+            thursday: {
+                classes: [
+                    { subject: "Science", time: "9:00 AM - 10:00 AM", instructor: "Mrs. Johnson" },
+                    { subject: "English", time: "10:15 AM - 11:15 AM", instructor: "Ms. Davis" },
+                    { subject: "History", time: "11:30 AM - 12:30 PM", instructor: "Mr. Wilson" },
+                    { lab: "Computer Lab", time: "1:00 PM - 2:00 PM", instructor: "Mr. Blue" }
+                ]
+            },
+            friday: {
+                classes: [
+                    { subject: "Geography", time: "9:00 AM - 10:00 AM", instructor: "Ms. Taylor" },
+                    { subject: "Physical Education", time: "10:15 AM - 11:15 AM", instructor: "Coach Green" },
+                    { lab: "Art Lab", time: "11:30 AM - 12:30 PM", instructor: "Ms. Red" }
+                ]
+            }
         };
 
-        const allTeachers = ["Mr. Smith", "Mrs. Johnson", "Ms. Davis", "Mr. Wilson", "Ms. Taylor", "Dr. White"]; // List of all teachers
-
+        // Function to generate the timetable
         function generateTimetable() {
-            // ... (previous code to populate timetable) ... 
-
-            // Calculate and update free teachers
-            updateFreeTeachers();
-        }
-
-        function updateFreeTeachers() {
-            const occupiedTeachers = new Set();
-            for (const day in timetableConfig) {
-                timetableConfig[day].classes.forEach(classData => {
-                    occupiedTeachers.add(classData.instructor);
-                });
-            }
-
-            const freeTeachersList = allTeachers.filter(teacher => !occupiedTeachers.has(teacher));
+            const days = Object.keys(timetableConfig);
             
-            const freeTeachersListElement = document.getElementById('free-teachers-list');
-            freeTeachersListElement.innerHTML = ''; // Clear previous list
-
-            freeTeachersList.forEach(teacher => {
-                const listItem = document.createElement('li');
-                listItem.textContent = teacher;
-                freeTeachersListElement.appendChild(listItem);
+            days.forEach(day => {
+                const { classes } = timetableConfig[day];
+                const classDetails = classes.map(c => `${c.time}: ${c.subject || c.lab}`).join("<br>");
+                const instructors = classes.map(c => c.instructor).join(", ");
+                
+                // Populate the timetable
+                document.getElementById(`${day}-time`).innerHTML = classDetails;
+                document.getElementById(`${day}-classes`).innerText = classes.map(c => c.subject || c.lab).join(", ");
+                document.getElementById(`${day}-instructor`).innerText = instructors;
             });
         }
 
-        generateTimetable();
+        // Generate the timetable on page load
+        window.onload = generateTimetable;
     </script>
 </body>
 </html>
-
